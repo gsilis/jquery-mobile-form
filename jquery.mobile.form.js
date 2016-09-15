@@ -81,6 +81,7 @@
 
   function generateTabableSelector() {
     var tabables = [
+      'checkbox',
       'color',
       'date',
       'datetime',
@@ -88,6 +89,7 @@
       'month',
       'number',
       'password',
+      'radio',
       'search',
       'submit',
       'tel',
