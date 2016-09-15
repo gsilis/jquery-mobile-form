@@ -3,6 +3,7 @@
 
   function MobileForm($element, options) {
     this.$element = $element;
+    this.options = options;
     this.tabableInputs = generateTabableSelector();
     this.onSubmit = $.proxy(this.onSubmit, this);
     this.onFocus = $.proxy(this.onFocus, this);
@@ -15,7 +16,10 @@
 
     attachListeners: function() {
       this.$element.on('submit', this.onSubmit);
-      this.$element.on('focus', this.tabableInputs, this.onFocus);
+
+      if (this.options.trackFocusedFields) {
+        this.$element.on('focus', this.tabableInputs, this.onFocus);
+      }
     },
 
     destroy: function() {
@@ -30,11 +34,13 @@
       var $formFields = this.$element.find(this.tabableInputs);
       var fieldIndex = $formFields.index(field);
       var focusedFields = this.focusedFields;
-      var availableFields = $formFields
-        .slice(fieldIndex)
-        .filter(function(index, field) {
+      var availableFields = $formFields.slice(fieldIndex + 1);
+
+      if (this.options.trackFocusedFields) {
+        availableFields = availableFields.filter(function(index, field) {
           return !focusedFields[field.name];
         });
+      }
 
       return availableFields[0];
     },
@@ -112,6 +118,7 @@
   $.fn.extend({
     mobileForm: function(options) {
       options = options || {};
+      options.trackFocusedFields = !!options.trackFocusedFields;
 
       var func;
       var isMobile = (/Mobi/).test(navigator.userAgent);
