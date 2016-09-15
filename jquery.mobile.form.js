@@ -100,6 +100,9 @@
     });
 
     tabables.push('select', 'textarea');
+    tabables = tabables.map(function(selector) {
+      return selector + ':visible';
+    });
 
     return tabables.join(',');
   }
