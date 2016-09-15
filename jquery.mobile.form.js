@@ -1,4 +1,4 @@
-(function($) {
+(function($, navigator) {
   var DATA_KEY = 'mobile-form';
 
   function MobileForm($element, options) {
@@ -106,7 +106,10 @@
 
   $.fn.extend({
     mobileForm: function(options) {
+      options = options || {};
+
       var func;
+      var isMobile = (/Mobi/).test(navigator.userAgent);
 
       switch(options) {
         case 'remove':
@@ -117,10 +120,14 @@
           break;
       }
 
+      if (!isMobile && !options.ovverideMobileCheck) {
+        return this;
+      }
+
       this.each(function(index, element) {
         func.apply(this, [element, options]);
       });
       return this;
     }
   });
-})(jQuery);
+})(jQuery, window.navigator);
